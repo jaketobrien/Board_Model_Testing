@@ -1,0 +1,28 @@
+2021-04-28 09:30:50,445 INFO 82 channels found for processing.
+2021-04-28 09:30:50,445 INFO Stream # 1: P-1
+2021-04-28 09:30:50,814 INFO normalized prediction error: 0.09
+2021-04-28 09:31:01,830 INFO 82 channels found for processing.
+2021-04-28 09:31:01,830 INFO Stream # 1: P-7
+2021-04-28 09:31:02,186 INFO normalized prediction error: 0.03
+2021-07-14 08:31:56,295 INFO 82 channels found for processing.
+2021-07-14 08:31:56,296 INFO Stream # 1: P-1
+2021-07-14 08:31:56,643 INFO normalized prediction error: 0.09
+2021-07-14 09:20:45,095 INFO 82 channels found for processing.
+2021-07-14 09:20:45,095 INFO Stream # 1: P-1
+2021-07-14 09:20:45,447 INFO normalized prediction error: 0.09
+2021-07-15 08:24:30,617 INFO 82 channels found for processing.
+2021-07-15 08:24:30,618 INFO Stream # 1: P-1
+2021-07-15 08:24:30,959 INFO normalized prediction error: 0.09
+2021-07-15 11:54:08,838 INFO 82 channels found for processing.
+2021-07-15 11:54:08,838 INFO 82 channels found for processing.
+2021-07-15 11:54:08,840 INFO Stream # 1: P-1
+2021-07-15 11:54:08,840 INFO Stream # 1: P-1
+2021-07-15 11:54:09,182 INFO normalized prediction error: 0.09
+2021-07-15 11:54:09,182 INFO normalized prediction error: 0.09
+2021-07-15 15:37:59,878 INFO 82 channels found for processing.
+2021-07-15 15:37:59,880 INFO Stream # 1: P-1
+2021-07-15 15:38:00,349 INFO normalized prediction error: 0.09
+2022-01-13 16:01:12,250 INFO 85 channels found for processing.
+2022-01-13 16:01:12,251 INFO Stream # 1: Untitled Folder
+2022-01-13 16:01:12,252 CRITICAL [Errno 2] No such file or directory: 'data/train/Untitled Folder.npy'
+2022-01-13 16:01:12,252 CRITICAL Source data not found, may need to add data to repo: <link>
