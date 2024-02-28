@@ -20,7 +20,9 @@ import matplotlib.pyplot as plt
 # Keras
 import keras
 #Tensorflow
-import tensorflow as tf
+#import tensorflow as tf
+import tflite_runtime.interpreter as tf
+import tflite_runtime.interpreter as tflite
 
 
 # In[2]:
@@ -83,7 +85,7 @@ else:
 
 # Convert .h5 to .tflite
 tflite_model_path = 'Saved_Models/' + ModelName + '.tflite'			# Name to save
-tf_model = tf.kears.models.load_model(ModelName)				# Load tensorflow model
+tf_model = tf.keras.models.load_model(ModelName)				# Load tensorflow model
 h5_model_path = 'Saved_Models/' + filename
 h5_model_filename = os.path.basename(h5_model_path)				# Extract file name
 tflite_model_filename = os.path.splitext(h5_model_filename)[0] + '.tflite'	# Replace extension
