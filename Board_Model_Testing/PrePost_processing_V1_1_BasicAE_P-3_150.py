@@ -74,7 +74,9 @@ def select_file():
         return None  # No file was selected
 
 # Path to the TensorFlow Lite model
-tflite_model_path = r"C:\Users\Realt\Documents\Model_Testing\Saved_models\BasicAE_P-3_150.tflite"
+#tflite_model_path = r"C:\Users\Realt\Documents\Model_Testing\Saved_models\BasicAE_P-3_150.tflite"
+tflite_model_path = "Saved_models/BasicAE_P-3_150.tflite"
+
 
 # Call the function and get the filename
 #filename = select_file()
