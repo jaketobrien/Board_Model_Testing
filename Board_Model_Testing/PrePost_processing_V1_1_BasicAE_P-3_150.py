@@ -511,7 +511,8 @@ for sample in X_train:
 
 #recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
 #recon_err_train = np.mean(np.power(X_train - output_data_train, 2), axis=1)
-recon_err_train = np.mean(np.power(X_val - output_data_train.reshape(X_train.shape), 2), axis=1)
+recon_err_train = np.mean(np.power(X_train - output_data_train.reshape(X_train.shape), 2), axis=1)
+#recon_err_train = np.mean(np.power(X_train - output_data_train.reshape(X_train.shape), 2), axis=1)
 
 
 
