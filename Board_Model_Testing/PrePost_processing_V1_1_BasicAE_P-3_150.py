@@ -276,7 +276,7 @@ for output_detail in output_details:
 
 X_train_np = np.array(X_train)
 #X_val = X_train[:int(len(X_train)/20)]
-X_val = X_train[:int(len(X_train_np)/20)].astype(np.float32)
+X_val = X_train_np[:int(len(X_train_np)/20)].astype(np.float32)
 
 # Perform inference
 interpreter.set_tensor(input_details[0]['index'], X_val)
