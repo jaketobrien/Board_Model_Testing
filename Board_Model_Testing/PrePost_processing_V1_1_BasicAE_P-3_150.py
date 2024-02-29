@@ -20,8 +20,8 @@ import matplotlib.pyplot as plt
 # Keras
 import keras
 #Tensorflow
-#import tensorflow as tf
-import tflite_runtime.interpreter as tf
+import tensorflow as tf
+#import tflite_runtime.interpreter as tf
 import tflite_runtime.interpreter as tflite
 
 
@@ -73,6 +73,9 @@ def select_file():
     else:
         return None  # No file was selected
 
+# Path to the TensorFlow Lite model
+tflite_model_path = r"C:\Users\Realt\Documents\Model_Testing\Saved_models\BasicAE_P-3_150.tflite"
+
 # Call the function and get the filename
 #filename = select_file()
 ModelName = 'BasicAE_P-3_150'
@@ -82,24 +85,7 @@ if filename:
     print("Selected file:", filename)
 else:
     print("No file was selected.")
-
-# Convert .h5 to .tflite
-tflite_model_path = 'Saved_Models/' + ModelName + '.tflite'			# Name to save
-tf_model = tf.keras.models.load_model(ModelName)				# Load tensorflow model
-h5_model_path = 'Saved_Models/' + filename
-h5_model_filename = os.path.basename(h5_model_path)				# Extract file name
-tflite_model_filename = os.path.splitext(h5_model_filename)[0] + '.tflite'	# Replace extension
-tflite_model_path = os.path.join('Saved_Models/', tflite_model_filename)
-converter = tf.lite.TFLiteConverter.from_keras_model(tf_model)
-tflite_model = converter.convert()
-
-# Save TFLite model
-with open(tflite_model_path, 'wb') as f:
-	f.write(tflite_model)
-
-print('Tensorflow Lite Model Conversion Complete')
-
-
+	
 
 # In[4]:
 
@@ -268,8 +254,26 @@ for y in range(0, len(ydata)-window_size, stride):
 # In[15]:
 
 
-model = keras.models.load_model(model_folder + model_name + '_' + filename + "_" + str(window_size) + '.tflite')
-model.summary()
+#model = keras.models.load_model(model_folder + model_name + '_' + filename + "_" + str(window_size) + '.tflite')
+#model.summary()
+
+# Load the TensorFlow Lite model
+interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+interpreter.allocate_tensors()
+
+# Get input and output details
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
+# Print model input details
+print("Input details:")
+for detail in input_details:
+    print(detail)
+
+# Print model output details
+print("\nOutput details:")
+for detail in output_details:
+    print(detail)
 
 
 # In[ ]:
@@ -566,34 +570,3 @@ print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
 print('Precision: %.3f' % precision_score(y_test, y_pred))
 print('Recall: %.3f' % recall_score(y_test, y_pred))
 print('Inference per Second: ', ips)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
