@@ -461,26 +461,57 @@ print('y_test Shape: ', np.shape(y_test))
 
 
 #X_recon_val = model.predict(X_val)
-interpreter.set_tensor(input_details[0]['index'], X_val)
-interpreter.invoke()
-output_data_train = interpreter.get_tensor(output_details[0]['index'])
+recon_err_val = []
+
+# Iterate through each sample in X_val
+for sample in X_val:
+    # Convert the sample to float32
+    sample = sample.astype(np.float32)
+    
+    # Set input tensor
+    interpreter.set_tensor(input_details[0]['index'], sample.reshape(1, -1))
+    
+    # Invoke the interpreter
+    interpreter.invoke()
+    
+    # Get output tensor
+    output_data_val = interpreter.get_tensor(output_details[0]['index'])
+    
+    # Append the output to recon_err_val
+    recon_err_val.append(output_data_val)
+
 
 #recon_err_val = np.mean(np.power(X_val - X_recon_val, 2), axis=1)
-recon_err_val = np.mean(np.power(X_val - output_data_train, 2), axis=1)
-
+#recon_err_val = np.mean(np.power(X_val - output_data_val, 2), axis=1)
+recon_err_val = np.mean(np.power(X_val - output_data_val.reshape(X_val.shape), 2), axis=1)
 
 
 # In[ ]:
 
 
 #X_recon_train = model.predict(X_train)
-X_train = X_train.astype(np.float32)
-interpreter.set_tensor(input_details[0]['index'], X_train)
-interpreter.invoke()
-output_data_train = interpreter.get_tensor(output_details[0]['index'])
+recon_err_train = []
+
+# Iterate through each sample in X_train
+for sample in X_train:
+    # Convert the sample to float32
+    sample = sample.astype(np.float32)
+    
+    # Set input tensor
+    interpreter.set_tensor(input_details[0]['index'], sample.reshape(1, -1))
+    
+    # Invoke the interpreter
+    interpreter.invoke()
+    
+    # Get output tensor
+    output_data_train = interpreter.get_tensor(output_details[0]['index'])
+    
+    # Append the output to recon_err_train
+    recon_err_train.append(output_data_train)
 
 #recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
-recon_err_train = np.mean(np.power(X_train - output_data_train, 2), axis=1)
+#recon_err_train = np.mean(np.power(X_train - output_data_train, 2), axis=1)
+recon_err_train = np.mean(np.power(X_val - output_data_train.reshape(X_train.shape), 2), axis=1)
 
 
 
@@ -495,10 +526,24 @@ recon_err_train = np.mean(np.power(X_train - output_data_train, 2), axis=1)
 start = time.time()
 
 #X_recon = model.predict(X_test)
-X_test = X_test.astype(np.float32)
-interpreter.set_tensor(input_details[0]['index'], X_test)
-interpreter.invoke()
-output_data_test = interpreter.get_tensor(output_details[0]['index'])
+recon_err_test = []
+
+# Iterate through each sample in X_test
+for sample in X_test:
+    # Convert the sample to float32
+    sample = sample.astype(np.float32)
+    
+    # Set input tensor
+    interpreter.set_tensor(input_details[0]['index'], sample.reshape(1, -1))
+    
+    # Invoke the interpreter
+    interpreter.invoke()
+    
+    # Get output tensor
+    output_data_test = interpreter.get_tensor(output_details[0]['index'])
+    
+    # Append the output to recon_err_train
+    recon_err_test.append(output_data_test)
 
 end = time.time()
 
@@ -507,8 +552,8 @@ total = end - start
 ips = len(X_test)/total # inference per sec on test set
 
 #recon_err_test = np.mean(np.power(X_test - X_recon, 2), axis=1)
-recon_err_test = np.mean(np.power(X_test - output_data_test, 2), axis=1)
-
+#recon_err_test = np.mean(np.power(X_test - output_data_test, 2), axis=1)
+recon_err_test = np.mean(np.power(X_test - output_data_test.reshape(X_test.shape), 2), axis=1)
 
 print('\nX_train Shape: ', np.shape(X_train))
 print('X_val Shape: ', np.shape(X_val))
