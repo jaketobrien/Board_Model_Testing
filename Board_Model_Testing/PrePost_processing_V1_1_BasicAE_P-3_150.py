@@ -281,7 +281,7 @@ X_train_np = np.array(X_train)
 X_val = X_train_np[:int(len(X_train_np)/20)].astype(np.float32)
 print("Shape of X_val before reshaping:", X_val.shape)
 #X_val = X_val.reshape(X_val.shape[1], X_val.shape[2])
-X_val = X_val.reshape(1, -1)[:,:150]
+#X_val = X_val.reshape(1, -1)[:,:150]
 print("X_val shape:", X_val.shape)
 
 # Perform inference
@@ -464,7 +464,8 @@ print('y_test Shape: ', np.shape(y_test))
 recon_err_val = []
 
 # Iterate through each sample in X_val
-for sample in X_val:
+for sample_index in range(len(X_val)):
+    sample = X_val[sample_index]
     # Convert the sample to float32
     sample = sample.astype(np.float32)
     
@@ -492,8 +493,11 @@ recon_err_val = np.mean(np.power(X_val - output_data_val.reshape(X_val.shape), 2
 #X_recon_train = model.predict(X_train)
 recon_err_train = []
 
-# Iterate through each sample in X_train
-for sample in X_train:
+# Iterate through each sample index in X_train
+for sample_index in range(len(X_train)):
+    # Access the sample using the index
+    sample = X_train[sample_index]
+    
     # Convert the sample to float32
     sample = sample.astype(np.float32)
     
@@ -506,14 +510,14 @@ for sample in X_train:
     # Get output tensor
     output_data_train = interpreter.get_tensor(output_details[0]['index'])
     
-    # Append the output to recon_err_train
-    recon_err_train.append(output_data_train)
+    # Calculate the reconstruction error for the current sample
+    recon_err_sample = np.mean(np.power(sample - output_data_train.reshape(sample.shape), 2))
+    
+    # Append the reconstruction error for the current sample to recon_err_train
+    recon_err_train.append(recon_err_sample)
 
-#recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
-#recon_err_train = np.mean(np.power(X_train - output_data_train, 2), axis=1)
-recon_err_train = np.mean(np.power(X_train - output_data_train.reshape(X_train.shape), 2), axis=1)
-#recon_err_train = np.mean(np.power(X_train - output_data_train.reshape(X_train.shape), 2), axis=1)
-
+# Convert recon_err_train to a numpy array after the loop
+recon_err_train = np.array(recon_err_train)
 
 
 # ### Training Dataset Reconstruction Error
@@ -526,11 +530,13 @@ recon_err_train = np.mean(np.power(X_train - output_data_train.reshape(X_train.s
 
 start = time.time()
 
-#X_recon = model.predict(X_test)
 recon_err_test = []
 
-# Iterate through each sample in X_test
-for sample in X_test:
+# Iterate through each sample index in X_test
+for sample_index in range(len(X_test)):
+    # Access the sample using the index
+    sample = X_test[sample_index]
+    
     # Convert the sample to float32
     sample = sample.astype(np.float32)
     
@@ -543,8 +549,11 @@ for sample in X_test:
     # Get output tensor
     output_data_test = interpreter.get_tensor(output_details[0]['index'])
     
-    # Append the output to recon_err_train
-    recon_err_test.append(output_data_test)
+    # Calculate the reconstruction error for the current sample
+    recon_err_sample = np.mean(np.power(sample - output_data_test.reshape(sample.shape), 2))
+    
+    # Append the reconstruction error for the current sample to recon_err_test
+    recon_err_test.append(recon_err_sample)
 
 end = time.time()
 
@@ -554,7 +563,8 @@ ips = len(X_test)/total # inference per sec on test set
 
 #recon_err_test = np.mean(np.power(X_test - X_recon, 2), axis=1)
 #recon_err_test = np.mean(np.power(X_test - output_data_test, 2), axis=1)
-recon_err_test = np.mean(np.power(X_test - output_data_test.reshape(X_test.shape), 2), axis=1)
+#recon_err_test = np.mean(np.power(X_test - output_data_test.reshape(X_test.shape), 2), axis=1)
+recon_err_test = np.array(recon_err_test)
 
 print('\nX_train Shape: ', np.shape(X_train))
 print('X_val Shape: ', np.shape(X_val))
