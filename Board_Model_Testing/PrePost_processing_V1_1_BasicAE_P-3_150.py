@@ -460,7 +460,10 @@ print('y_test Shape: ', np.shape(y_test))
 # In[ ]:
 
 
-X_recon_val = model.predict(X_val)
+#X_recon_val = model.predict(X_val)
+interpreter.set_tensor(input_details[0]['index'], X_val)
+interpreter.invoke()
+output_data_train = interpreter.get_tensor(output_details[0]['index'])
 
 recon_err_val = np.mean(np.power(X_val - X_recon_val, 2), axis=1)
 
