@@ -281,7 +281,7 @@ X_train_np = np.array(X_train)
 X_val = X_train_np[:int(len(X_train_np)/20)].astype(np.float32)
 print("Shape of X_val before reshaping:", X_val.shape)
 #X_val = X_val.reshape(X_val.shape[1], X_val.shape[2])
-X_val = np.reshape(X_val, (1, -1))
+X_val = X_val.reshape(1, -1)[:,:150]
 print("X_val shape:", X_val.shape)
 
 # Perform inference
