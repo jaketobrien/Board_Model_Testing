@@ -18,7 +18,7 @@ from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_sc
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 # Keras
-import keras
+#import keras
 #Tensorflow
 #import tensorflow as tf
 #import tflite_runtime.interpreter as tf
