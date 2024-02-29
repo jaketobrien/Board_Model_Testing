@@ -274,14 +274,17 @@ for output_detail in output_details:
     output_data = interpreter.get_tensor(output_detail['index'])
     output_data_list.append(output_data)
 
-#X_val = X_train[:int(len(X_train)/20)]
-#X_val = X_train[:int(len(X_train)/20)].astype(np.float32)
-
+# Convert X_train to numpy array
 X_train_np = np.array(X_train)
-X_val = X_train_np[:int(len(X_train_np)/20)].astype(np.float32)
-print("Shape of X_val before reshaping:", X_val.shape)
-#X_val = X_val.reshape(X_val.shape[1], X_val.shape[2])
-#X_val = X_val.reshape(1, -1)[:,:150]
+
+# Reshape X_val to (1, 150)
+X_val_reshaped = X_train_np[:int(len(X_train_np)/20)].astype(np.float32)
+
+# Perform inference
+interpreter.set_tensor(input_details[0]['index'], X_val_reshaped)
+interpreter.invoke()
+output_data = interpreter.get_tensor(output_details[0]['index'])
+
 print("X_val shape:", X_val.shape)
 
 # Perform inference
@@ -472,8 +475,11 @@ for sample_index in range(len(X_val)):
     # Convert the sample to float32
     sample = sample.astype(np.float32)
     
+    # Reshape the sample to (1, -1) and select the first 150 elements
+    sample_reshaped = sample.reshape(1, -1)[:,:150]
+    
     # Set input tensor
-    interpreter.set_tensor(input_details[0]['index'], sample.reshape(1, -1))
+    interpreter.set_tensor(input_details[0]['index'], sample_reshaped)
     
     # Invoke the interpreter
     interpreter.invoke()
@@ -490,7 +496,6 @@ for sample_index in range(len(X_val)):
 # Convert recon_err_val to a numpy array after the loop
 recon_err_val = np.array(recon_err_val)
 
-
 # In[ ]:
 
 
@@ -506,8 +511,11 @@ for sample_index in range(len(X_train)):
     # Convert the sample to float32
     sample = sample.astype(np.float32)
     
+    # Reshape the sample to (1, -1) and select the first 150 elements
+    sample_reshaped = sample.reshape(1, -1)[:,:150]
+    
     # Set input tensor
-    interpreter.set_tensor(input_details[0]['index'], sample.reshape(1, -1))
+    interpreter.set_tensor(input_details[0]['index'], sample_reshaped)
     
     # Invoke the interpreter
     interpreter.invoke()
@@ -523,6 +531,7 @@ for sample_index in range(len(X_train)):
 
 # Convert recon_err_train to a numpy array after the loop
 recon_err_train = np.array(recon_err_train)
+
 
 
 # ### Training Dataset Reconstruction Error
@@ -541,7 +550,7 @@ recon_err_test = []
 # Iterate through each element in the first dimension of X_test
 for i in range(X_test.shape[0]):
     # Get the sample from X_test and reshape it to (1, 150)
-    sample = X_test[i][0].reshape(1, -1)
+    sample = X_test[i][0].reshape(1, -1)[:,:150]
     
     # Convert the sample to float32
     sample = sample.astype(np.float32)
