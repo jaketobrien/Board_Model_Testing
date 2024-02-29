@@ -475,7 +475,6 @@ recon_err_val = np.mean(np.power(X_val - output_data_train, 2), axis=1)
 
 #X_recon_train = model.predict(X_train)
 X_train = X_train.astype(np.float32)
-X_train = X_train.reshape(1, -1)[:,:150]
 interpreter.set_tensor(input_details[0]['index'], X_train)
 interpreter.invoke()
 output_data_train = interpreter.get_tensor(output_details[0]['index'])
@@ -497,10 +496,9 @@ start = time.time()
 
 #X_recon = model.predict(X_test)
 X_test = X_test.astype(np.float32)
-X_test = X_test.reshape(1, -1)[:,:150]
 interpreter.set_tensor(input_details[0]['index'], X_test)
 interpreter.invoke()
-output_data_train = interpreter.get_tensor(output_details[0]['index'])
+output_data_test = interpreter.get_tensor(output_details[0]['index'])
 
 end = time.time()
 
