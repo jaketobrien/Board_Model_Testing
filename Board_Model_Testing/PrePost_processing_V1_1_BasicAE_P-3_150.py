@@ -465,7 +465,9 @@ interpreter.set_tensor(input_details[0]['index'], X_val)
 interpreter.invoke()
 output_data_train = interpreter.get_tensor(output_details[0]['index'])
 
-recon_err_val = np.mean(np.power(X_val - X_recon_val, 2), axis=1)
+#recon_err_val = np.mean(np.power(X_val - X_recon_val, 2), axis=1)
+recon_err_val = np.mean(np.power(X_val - output_data_train, 2), axis=1)
+
 
 
 # In[ ]:
