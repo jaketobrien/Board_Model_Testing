@@ -480,7 +480,9 @@ interpreter.set_tensor(input_details[0]['index'], X_train)
 interpreter.invoke()
 output_data_train = interpreter.get_tensor(output_details[0]['index'])
 
-recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
+#recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
+recon_err_train = np.mean(np.power(X_train - output_data_train, 2), axis=1)
+
 
 
 # ### Training Dataset Reconstruction Error
@@ -506,7 +508,14 @@ total = end - start
 
 ips = len(X_test)/total # inference per sec on test set
 
-recon_err_test = np.mean(np.power(X_test - X_recon, 2), axis=1)
+#recon_err_test = np.mean(np.power(X_test - X_recon, 2), axis=1)
+recon_err_test = np.mean(np.power(X_test - output_data_test, 2), axis=1)
+
+
+print('\nX_train Shape: ', np.shape(X_train))
+print('X_val Shape: ', np.shape(X_val))
+print('X_test Shape: ', np.shape(X_test))
+print('y_test Shape: ', np.shape(y_test))
 
 
 # ## Model Specific Post-processing
