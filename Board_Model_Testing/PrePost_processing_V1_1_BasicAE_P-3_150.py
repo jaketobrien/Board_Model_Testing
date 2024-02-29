@@ -18,7 +18,7 @@ from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_sc
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 # Keras
-#import keras
+import keras
 #Tensorflow
 #import tensorflow as tf
 #import tflite_runtime.interpreter as tf
@@ -265,10 +265,22 @@ interpreter.allocate_tensors()
 
 # Get input and output details
 input_details = interpreter.get_input_details()
+# Get output details
 output_details = interpreter.get_output_details()
 
+# Dynamically retrieve tensor data for each output detail
+output_data_list = []
+for output_detail in output_details:
+    output_data = interpreter.get_tensor(output_detail['index'])
+    output_data_list.append(output_data)
+
+# Perform inference
+interpreter.set_tensor(input_details[0]['index'], X_val)  # Assuming X_val is your input data
+interpreter.invoke()
+output_data = interpreter.get_tensor(output_details[0]['index'])
+
 # Print model input details
-print("Input details:")
+print("\nInput details:")
 for detail in input_details:
     print(detail)
 
@@ -276,6 +288,8 @@ for detail in input_details:
 print("\nOutput details:")
 for detail in output_details:
     print(detail)
+
+print('\n')
 
 
 # In[ ]:
