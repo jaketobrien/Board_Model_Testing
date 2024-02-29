@@ -279,6 +279,7 @@ for output_detail in output_details:
 
 X_train_np = np.array(X_train)
 X_val = X_train_np[:int(len(X_train_np)/20)].astype(np.float32)
+print("Shape of X_val before reshaping:", X_val.shape)
 X_val = X_val.reshape(X_val.shape[1], X_val.shape[2])
 print("X_val shape:", X_val.shape)
 
