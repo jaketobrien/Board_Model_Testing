@@ -268,17 +268,11 @@ input_details = interpreter.get_input_details()
 # Get output details
 output_details = interpreter.get_output_details()
 
-# Dynamically retrieve tensor data for each output detail
-output_data_list = []
-for output_detail in output_details:
-    output_data = interpreter.get_tensor(output_detail['index'])
-    output_data_list.append(output_data)
-
 # Convert X_train to numpy array
 X_train_np = np.array(X_train)
 
-# Reshape X_val to (1, 150)
-X_val_reshaped = X_train_np[:int(len(X_train_np)/20)].astype(np.float32)
+# Reshape the first sample in X_train_np to (1, 150)
+X_val_reshaped = X_train_np[:int(len(X_train_np)/20)][0].reshape(1, -1)[:,:150].astype(np.float32)
 
 # Perform inference
 interpreter.set_tensor(input_details[0]['index'], X_val_reshaped)
