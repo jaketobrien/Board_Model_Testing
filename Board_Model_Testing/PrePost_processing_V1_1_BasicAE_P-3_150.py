@@ -274,8 +274,9 @@ for output_detail in output_details:
     output_data = interpreter.get_tensor(output_detail['index'])
     output_data_list.append(output_data)
 
+X_train_np = np.array(X_train)
 #X_val = X_train[:int(len(X_train)/20)]
-X_val = X_train[:int(len(X_train)/20)].astype(np.float32)
+X_val = X_train[:int(len(X_train_np)/20)].astype(np.float32)
 
 # Perform inference
 interpreter.set_tensor(input_details[0]['index'], X_val)
