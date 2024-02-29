@@ -258,7 +258,7 @@ for y in range(0, len(ydata)-window_size, stride):
 #model.summary()
 
 # Load the TensorFlow Lite model
-interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+interpreter = tflite.Interpreter(model_path=tflite_model_path)
 interpreter.allocate_tensors()
 
 # Get input and output details
