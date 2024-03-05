@@ -394,7 +394,8 @@ print('y_test Shape: ', np.shape(y_test))
 # In[21]:
 
 
-fullname = model_name + '_' + filename + "_" + str(window_size) + '.tflite'
+#fullname = model_name + '_' + filename + "_" + str(window_size) + '.tflite'
+fullname = r"C:\Users\Realt\Documents\Model_Testing\Saved_models\BasicAE_P-3_150.tflite"
 fullname
 print("Model file path:", fullname)
 
