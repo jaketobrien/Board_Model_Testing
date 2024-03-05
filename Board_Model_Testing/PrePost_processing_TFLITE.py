@@ -250,33 +250,37 @@ for y in range(0, len(ydata)-window_size, stride):
 
 X_test = []
 y_test = []
-limit = window_size*threshold
+limit = window_size * threshold
 temp = []
 
-for y in range(0, len(points_test)-window_size, stride):
+for y in range(0, len(points_test) - window_size, stride):
     end = window_size + y
     for x in range(y, end):
         temp.append(points_test[x])
-    
+
     if len(anomaly_ranges) == 2:
-	if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)):
-	    y_test.append(1)
-	else:
-	    y_test.append(0)
+        if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or \
+                y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)):
+            y_test.append(1)
+        else:
+            y_test.append(0)
+            
     if len(anomaly_ranges) == 3:
-	if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)) or y in range(anomaly_ranges[2][0] - int(limit), anomaly_ranges[2][1] + int(limit)):
-	    y_test.append(1)
-	else:
-	    y_test.append(0)
+        if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or \
+                y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)) or \
+                y in range(anomaly_ranges[2][0] - int(limit), anomaly_ranges[2][1] + int(limit)):
+            y_test.append(1)
+        else:
+            y_test.append(0)
+            
     if len(anomaly_ranges) == 1:
-	if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)):
-	    y_test.append(1)
-	else:
-	    y_test.append(0)
-	    
+        if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)):
+            y_test.append(1)
+        else:
+            y_test.append(0)
+            
     X_test.append(temp)
     temp = []
-
 
 # ### Validataion Dataset Split
 # A validation dataset is created from the X_train data before the training step. 20% of the data is taken out of the training dataset and both are relabeled
