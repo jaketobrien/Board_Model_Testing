@@ -56,23 +56,24 @@ import matplotlib.pyplot as plt
 # In[3]:
 
 
-def select_file():
+#def select_file():
     #root = tk.Tk()
     #root.withdraw()  # Hide the small tkinter window
 
-    current_working_directory = os.getcwd()
-    folder = current_working_directory + '/Saved_models'
-    file_path = filedialog.askopenfilename(initialdir=folder)
+    #current_working_directory = os.getcwd()
+    #folder = current_working_directory + '/Saved_models'
+    #file_path = filedialog.askopenfilename(initialdir=folder)
 
-    if file_path:  # Check if a file was selected
+    #if file_path:  # Check if a file was selected
         # Extract the filename from the full path
-        filename = os.path.basename(file_path)
-        return filename
-    else:
-        return None  # No file was selected
+        #filename = os.path.basename(file_path)
+        #return filename
+    #else:
+        #return None  # No file was selected
 
 # Call the function and get the filename
-filename = select_file()
+#filename = select_file()
+filename = BasicAE_P-3_150.tflite
 filename, extension = os.path.splitext(filename)
 if filename:
     print("Selected file:", filename)
