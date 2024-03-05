@@ -519,14 +519,14 @@ recon_err_val = np.mean(np.power(X_val - X_recon_val, 2), axis=1)
 if model_name == 'HybridAE' or model_name == 'LSTMAE':
     result = []
     for e in recon_err_test:
-	result.append(np.mean(e))
+        result.append(np.mean(e))
     recon_err_test = result
     zero = np.zeros(int((np.shape(X_train[1])[0]))+1)
     recon_err_test = np.concatenate((zero, recon_err_test))
 
 
 # ### Reconstruction Error Threshold
-# Calculates the reconstruction error threshold to apply to test set predictions. If the value of the reconstruction error exceed the threshold, it is considered anomalous.
+# Calculates the reconstruction error threshold to apply to test set predictions. If the value of the reconstruction error exceeds the threshold, it is considered anomalous.
 
 # In[39]:
 
@@ -568,7 +568,7 @@ roc_auc = auc(fpr, tpr)
 plt.figure(figsize=(8, 5))
 lw = 1
 plt.plot(fpr, tpr,
-	 lw=lw, label='CNN Autoencoder (area = %0.2f)' % roc_auc)
+         lw=lw, label='CNN Autoencoder (area = %0.2f)' % roc_auc)
 
 plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
 plt.xlim([0.0, 1.0])
@@ -594,7 +594,7 @@ fig, ax = plt.subplots(figsize=(8, 8))
 ax.matshow(conf_matrix, cmap=plt.cm.Oranges, alpha=0.3)
 for i in range(conf_matrix.shape[0]):
     for j in range(conf_matrix.shape[1]):
-	ax.text(x=j, y=i,s=conf_matrix[i, j], va='center', ha='center', size='xx-large')
+        ax.text(x=j, y=i, s=conf_matrix[i, j], va='center', ha='center', size='xx-large')
 
 plt.xlabel('Predictions', fontsize=18)
 plt.ylabel('Actuals', fontsize=18)
