@@ -256,7 +256,7 @@ temp = []
 for y in range(0, len(points_test)-window_size, stride):
     end = window_size + y
     for x in range(y, end):
-	temp.append(points_test[x])
+        temp.append(points_test[x])
     
     if len(anomaly_ranges) == 2:
 	if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)):
