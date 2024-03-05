@@ -17,7 +17,7 @@ from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_sc
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 # Keras
-import keras
+#import keras
 
 
 # In[2]:
@@ -401,6 +401,7 @@ fullname
 
 import numpy as np
 #import tensorflow as tf
+import tensorflow.lite as tflite
 
 # Load the TFLite model and allocate tensors
 interpreter = tflite.Interpreter(model_path=fullname)
