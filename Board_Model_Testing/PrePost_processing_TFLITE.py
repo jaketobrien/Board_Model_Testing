@@ -73,8 +73,8 @@ import matplotlib.pyplot as plt
 
 # Call the function and get the filename
 #filename = select_file()
-#ModelName = 'BasicAE_P-3_150'
-ModelName = 'Transformer_P-3_100'
+ModelName = 'BasicAE_P-3_150'
+#ModelName = 'Transformer_P-3_100'
 filename = ModelName + '_edgetpu.tflite'
 filename, extension = os.path.splitext(filename)
 if filename:
@@ -450,7 +450,6 @@ recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
 
 # In[36]:
 
-
 X_recon = []
 for test_example in X_test:
     # Ensure the data is in the correct dtype expected by the model
@@ -479,24 +478,31 @@ recon_err_test = np.mean(np.power(X_test - X_recon, 2), axis=1)
 
 # In[37]:
 
+start = time.time()
 
-X_recon_val = []
-for test_example in X_val:
-    # Ensure the data is in the correct dtype expected by the model
-    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    
-    # Set the model input tensor to the preprocessed test_example
-    interpreter.set_tensor(input_details[0]['index'], test_example)
-    
-    # Run inference
-    interpreter.invoke()
-    
-    # Extract the output tensor and remove the unnecessary dimension
-    output_data = interpreter.get_tensor(output_details[0]['index'])
-    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
-    
-    # Append the result to the predictions list
-    X_recon_val.append(output_data_squeezed)
+print('Starting Loop')
+while True:
+	X_recon_val = []
+	for test_example in X_val:
+	    # Ensure the data is in the correct dtype expected by the model
+	    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+	    
+	    # Set the model input tensor to the preprocessed test_example
+	    interpreter.set_tensor(input_details[0]['index'], test_example)
+	    
+	    # Run inference
+	    interpreter.invoke()
+	    
+	    # Extract the output tensor and remove the unnecessary dimension
+	    output_data = interpreter.get_tensor(output_details[0]['index'])
+	    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+	    
+	    # Append the result to the predictions list
+	    X_recon_val.append(output_data_squeezed)
+
+end = time.time()
+total = end - start
+ips = len(X_test)/total
 
 # Convert predictions list to a numpy array
 X_recon_val = np.array(X_recon_val)
@@ -598,6 +604,4 @@ print('F1 Score: %.3f' % f1_score(y_test, y_pred))
 print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
 print('Precision: %.3f' % precision_score(y_test, y_pred))
 print('Recall: %.3f' % recall_score(y_test, y_pred))
-
-
-# In[ ]:
+print('Inference Per Second', ips)
