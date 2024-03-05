@@ -163,9 +163,9 @@ for n in range(0, len(test)):
     temp.append(int(test[n].strip(' [] ')))
     counter += 1
     if counter == 2:
-	anomaly_ranges.append(temp)
-	temp = []
-	counter = 0
+        anomaly_ranges.append(temp)
+        temp = []
+        counter = 0
 
 print("Total number of labelled anomalies in dataset:", len(anomaly_ranges))
 print("Ranges of anomalies: ", anomaly_ranges)
