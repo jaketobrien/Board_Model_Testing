@@ -402,10 +402,11 @@ fullname
 
 import numpy as np
 #import tensorflow as tf
-import tensorflow.lite as tflite
+#import tensorflow.lite as tflite
+from tflite_runtime.interpreter import Interpreter
 
 # Load the TFLite model and allocate tensors
-interpreter = tflite.Interpreter(model_path=fullname)
+interpreter = Interpreter(model_path=fullname)
 interpreter.allocate_tensors()
 
 # Get input and output tensor information
