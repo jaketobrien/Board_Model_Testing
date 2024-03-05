@@ -318,35 +318,29 @@ print('y_test Shape: ', np.shape(y_test))
 def temporalize(X, y, lookback):
     output_X = []
     output_y = []
-    for i in range(len(X)-lookback-1):
-	t = []
-	for j in range(1,lookback+1):
-	    # Gather past records upto the lookback period
-	    t.append(X[[(i+j+1)], :])
-	output_X.append(t)
-	output_y.append(y[i+lookback+1])
+    for i in range(len(X) - lookback - 1):
+        t = []
+        for j in range(1, lookback + 1):
+            # Gather past records upto the lookback period
+            t.append(X[[(i + j + 1)], :])
+        output_X.append(t)
+        output_y.append(y[i + lookback + 1])
     return output_X, output_y
 
 
-# In[18]:
-
-
 def split_sequence(sequence, n_steps):
-	X, y = list(), list()
-	for i in range(len(sequence)):
-		# find the end of this pattern
-		end_ix = i + n_steps
-		# check if we are beyond the sequence
-		if end_ix > len(sequence)-1:
-			break
-		# gather input and output parts of the pattern
-		seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
-		X.append(seq_x)
-		y.append(seq_y)
-	return np.array(X), np.array(y)
-
-
-# In[19]:
+    X, y = list(), list()
+    for i in range(len(sequence)):
+        # find the end of this pattern
+        end_ix = i + n_steps
+        # check if we are beyond the sequence
+        if end_ix > len(sequence) - 1:
+            break
+        # gather input and output parts of the pattern
+        seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
+        X.append(seq_x)
+        y.append(seq_y)
+    return np.array(X), np.array(y)
 
 
 if model_name == 'CNNAE':
@@ -368,17 +362,17 @@ if model_name == 'HybridAE' or model_name == 'LSTMAE':
     timesteps = window_size
     n_features = window_size
 
-    X, y = temporalize(X = X_train, y = np.zeros(len(X_train)), lookback = timesteps)
+    X, y = temporalize(X=X_train, y=np.zeros(len(X_train)), lookback=timesteps)
 
     X = np.array(X)
     X_train = X.reshape(X.shape[0], timesteps, n_features)
     
-    X_t, y_t = temporalize(X = X_test, y = np.zeros(len(X_test)), lookback = timesteps)
+    X_t, y_t = temporalize(X=X_test, y=np.zeros(len(X_test)), lookback=timesteps)
 
     X_t = np.array(X_t)
     X_test = X_t.reshape(X_t.shape[0], timesteps, n_features)
     
-    X_v, y_v = temporalize(X = X_val, y = np.zeros(len(X_val)), lookback = timesteps)
+    X_v, y_v = temporalize(X=X_val, y=np.zeros(len(X_val)), lookback=timesteps)
 
     X_v = np.array(X_v)
     X_val = X_v.reshape(X_v.shape[0], timesteps, n_features)
