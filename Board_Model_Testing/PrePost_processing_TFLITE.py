@@ -405,7 +405,7 @@ print("Model file path:", fullname)
 import numpy as np
 #import tensorflow as tf
 #import tensorflow.lite as tflite
-from tflite_runtime as tflite
+import tflite_runtime as tflite
 
 # Load the TFLite model and allocate tensors
 interpreter = tflite.Interpreter(model_path=fullname)
