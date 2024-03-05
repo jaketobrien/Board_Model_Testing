@@ -73,8 +73,8 @@ import matplotlib.pyplot as plt
 
 # Call the function and get the filename
 #filename = select_file()
-ModelName = 'BasicAE_P-3_150_edgetpu'
-filename = ModelName + '.tflite'
+ModelName = 'BasicAE_P-3_150'
+filename = ModelName + '_edgetpu.tflite'
 filename, extension = os.path.splitext(filename)
 if filename:
     print("Selected file:", filename)
