@@ -396,6 +396,7 @@ print('y_test Shape: ', np.shape(y_test))
 
 fullname = model_name + '_' + filename + "_" + str(window_size) + '.tflite'
 fullname
+print("Model file path:", fullname)
 
 
 # In[22]:
@@ -406,13 +407,29 @@ import numpy as np
 #import tensorflow.lite as tflite
 from tflite_runtime.interpreter import Interpreter
 
+if not os.path.exists(fullname):
+    print("Error: TFLite model file does not exist at the specified path.")
+else:
+    try:
+        # Load the TFLite model and allocate tensors
+        interpreter = Interpreter(model_path=fullname)
+        interpreter.allocate_tensors()
+
+        # Get input and output tensor information
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
+
+        print("TFLite model loaded successfully.")
+    except Exception as e:
+        print("Error:", e)
+
 # Load the TFLite model and allocate tensors
-interpreter = Interpreter(model_path=fullname)
-interpreter.allocate_tensors()
+#interpreter = Interpreter(model_path=fullname)
+#interpreter.allocate_tensors()
 
 # Get input and output tensor information
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
+#input_details = interpreter.get_input_details()
+#output_details = interpreter.get_output_details()
 
 
 # ### Training Dataset Reconstruction Error
