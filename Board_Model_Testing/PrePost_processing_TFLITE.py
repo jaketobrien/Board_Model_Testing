@@ -238,10 +238,9 @@ temp = []
 for y in range(0, len(ydata)-window_size, stride):
     end = window_size + y
     for x in range(y, end):
-	temp.append(ydata[x])
+        temp.append(ydata[x])
     X_train.append(temp)
     temp = []
-
 
 # ### X_test & y_test Definition
 # X_test & y_test is now loaded as an array of datapoints for the length of the train dataset, with the window size number of points at each position. The array will look like (length_X_test, window_size), (length_y_test, 1)
