@@ -75,9 +75,9 @@ import matplotlib.pyplot as plt
 # Call the function and get the filename
 #filename = select_file()
 
-#ModelName = 'BasicAE_P-3_150'
+ModelName = 'BasicAE_P-3_150'
 #ModelName = 'CNNAE_P-3_30'
-ModelName = 'Transformer_P-3_100'
+#ModelName = 'Transformer_P-3_100'
 #ModelName = 'VAE_P-3_50'
 #ModelName = 'HybridAE_P-3_30'
 #ModelName = 'LSTMAE_P-3_30'
@@ -455,23 +455,25 @@ recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
 
 start = time.time()
 
-X_recon = []
-for test_example in X_test:
-    # Ensure the data is in the correct dtype expected by the model
-    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    
-    # Set the model input tensor to the preprocessed test_example
-    interpreter.set_tensor(input_details[0]['index'], test_example)
-    
-    # Run inference
-    interpreter.invoke()
-    
-    # Extract the output tensor and remove the unnecessary dimension
-    output_data = interpreter.get_tensor(output_details[0]['index'])
-    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
-    
-    # Append the result to the predictions list
-    X_recon.append(output_data_squeezed)
+print('Starting Loop')
+while True:
+    X_recon = []
+    for test_example in X_test:
+        # Ensure the data is in the correct dtype expected by the model
+        test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+        
+        # Set the model input tensor to the preprocessed test_example
+        interpreter.set_tensor(input_details[0]['index'], test_example)
+        
+        # Run inference
+        interpreter.invoke()
+        
+        # Extract the output tensor and remove the unnecessary dimension
+        output_data = interpreter.get_tensor(output_details[0]['index'])
+        output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+        
+        # Append the result to the predictions list
+        X_recon.append(output_data_squeezed)
 
 end = time.time()
 total = end - start
