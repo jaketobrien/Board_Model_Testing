@@ -610,12 +610,3 @@ print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
 print('Precision: %.3f' % precision_score(y_test, y_pred))
 print('Recall: %.3f' % recall_score(y_test, y_pred))
 print('Inference Per Second: ', ips)
-
-n += 1
-
-
-# In[ ]:
-	
-	
-	
-	
