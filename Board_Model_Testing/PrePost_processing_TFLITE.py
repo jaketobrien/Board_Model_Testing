@@ -405,10 +405,10 @@ print("Model file path:", fullname)
 import numpy as np
 #import tensorflow as tf
 #import tensorflow.lite as tflite
-from tflite_runtime.interpreter import Interpreter
+from tflite_runtime as tflite
 
 # Load the TFLite model and allocate tensors
-interpreter = Interpreter(model_path=fullname)
+interpreter = tflite.Interpreter(model_path=fullname)
 interpreter.allocate_tensors()
 
 # Get input and output tensor information
