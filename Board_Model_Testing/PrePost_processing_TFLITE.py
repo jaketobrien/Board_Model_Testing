@@ -73,7 +73,7 @@ import matplotlib.pyplot as plt
 
 # Call the function and get the filename
 #filename = select_file()
-ModelName = 'BasicAE_P-3_150'
+ModelName = 'BasicAE_P-3_150_edgetpu'
 filename = ModelName + '.tflite'
 filename, extension = os.path.splitext(filename)
 if filename:
@@ -394,7 +394,7 @@ print('y_test Shape: ', np.shape(y_test))
 # In[21]:
 
 
-fullname = model_name + '_' + filename + "_" + str(window_size) + '.tflite'
+fullname = model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
 fullname
 print("Model file path:", fullname)
 
