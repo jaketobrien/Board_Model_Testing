@@ -408,7 +408,7 @@ import numpy as np
 import tflite_runtime.interpreter as tflite
 
 # Load the TFLite model and allocate tensors
-interpreter = tflite.Interpreter(model_path=fullname)
+interpreter = tflite.Interpreter(model_path=fullname, experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
 interpreter.allocate_tensors()
 
 # Get input and output tensor information
