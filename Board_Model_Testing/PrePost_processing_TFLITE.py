@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 import os
 import csv
-import time
 # Analysis
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_auc_score, roc_curve, auc
@@ -74,13 +73,7 @@ import matplotlib.pyplot as plt
 
 # Call the function and get the filename
 #filename = select_file()
-
 ModelName = 'BasicAE_P-3_150'
-#ModelName = 'CNNAE_P-3_30'
-#ModelName = 'Transformer_P-3_100'
-#ModelName = 'VAE_P-3_50'
-#ModelName = 'HybridAE_P-3_30'
-#ModelName = 'LSTMAE_P-3_30'
 filename = ModelName + '_edgetpu.tflite'
 filename, extension = os.path.splitext(filename)
 if filename:
@@ -242,6 +235,7 @@ for y in range(0, len(ydata)-window_size, stride):
     X_train.append(temp)
     temp = []
 
+
 # ### X_test & y_test Definition
 # X_test & y_test is now loaded as an array of datapoints for the length of the train dataset, with the window size number of points at each position. The array will look like (length_X_test, window_size), (length_y_test, 1)
 
@@ -250,29 +244,24 @@ for y in range(0, len(ydata)-window_size, stride):
 
 X_test = []
 y_test = []
-limit = window_size * threshold
+limit = window_size*threshold
 temp = []
 
-for y in range(0, len(points_test) - window_size, stride):
+for y in range(0, len(points_test)-window_size, stride):
     end = window_size + y
     for x in range(y, end):
         temp.append(points_test[x])
-
+    
     if len(anomaly_ranges) == 2:
-        if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or \
-                y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)):
+        if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)):
             y_test.append(1)
         else:
             y_test.append(0)
-            
     if len(anomaly_ranges) == 3:
-        if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or \
-                y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)) or \
-                y in range(anomaly_ranges[2][0] - int(limit), anomaly_ranges[2][1] + int(limit)):
+        if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)) or y in range(anomaly_ranges[1][0] - int(limit), anomaly_ranges[1][1] + int(limit)) or y in range(anomaly_ranges[2][0] - int(limit), anomaly_ranges[2][1] + int(limit)):
             y_test.append(1)
         else:
             y_test.append(0)
-            
     if len(anomaly_ranges) == 1:
         if y in range(anomaly_ranges[0][0] - int(limit), anomaly_ranges[0][1] + int(limit)):
             y_test.append(1)
@@ -281,6 +270,7 @@ for y in range(0, len(points_test) - window_size, stride):
             
     X_test.append(temp)
     temp = []
+
 
 # ### Validataion Dataset Split
 # A validation dataset is created from the X_train data before the training step. 20% of the data is taken out of the training dataset and both are relabeled
@@ -318,29 +308,35 @@ print('y_test Shape: ', np.shape(y_test))
 def temporalize(X, y, lookback):
     output_X = []
     output_y = []
-    for i in range(len(X) - lookback - 1):
+    for i in range(len(X)-lookback-1):
         t = []
-        for j in range(1, lookback + 1):
+        for j in range(1,lookback+1):
             # Gather past records upto the lookback period
-            t.append(X[[(i + j + 1)], :])
+            t.append(X[[(i+j+1)], :])
         output_X.append(t)
-        output_y.append(y[i + lookback + 1])
+        output_y.append(y[i+lookback+1])
     return output_X, output_y
 
 
+# In[18]:
+
+
 def split_sequence(sequence, n_steps):
-    X, y = list(), list()
-    for i in range(len(sequence)):
-        # find the end of this pattern
-        end_ix = i + n_steps
-        # check if we are beyond the sequence
-        if end_ix > len(sequence) - 1:
-            break
-        # gather input and output parts of the pattern
-        seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
-        X.append(seq_x)
-        y.append(seq_y)
-    return np.array(X), np.array(y)
+	X, y = list(), list()
+	for i in range(len(sequence)):
+		# find the end of this pattern
+		end_ix = i + n_steps
+		# check if we are beyond the sequence
+		if end_ix > len(sequence)-1:
+			break
+		# gather input and output parts of the pattern
+		seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
+		X.append(seq_x)
+		y.append(seq_y)
+	return np.array(X), np.array(y)
+
+
+# In[19]:
 
 
 if model_name == 'CNNAE':
@@ -362,17 +358,17 @@ if model_name == 'HybridAE' or model_name == 'LSTMAE':
     timesteps = window_size
     n_features = window_size
 
-    X, y = temporalize(X=X_train, y=np.zeros(len(X_train)), lookback=timesteps)
+    X, y = temporalize(X = X_train, y = np.zeros(len(X_train)), lookback = timesteps)
 
     X = np.array(X)
     X_train = X.reshape(X.shape[0], timesteps, n_features)
     
-    X_t, y_t = temporalize(X=X_test, y=np.zeros(len(X_test)), lookback=timesteps)
+    X_t, y_t = temporalize(X = X_test, y = np.zeros(len(X_test)), lookback = timesteps)
 
     X_t = np.array(X_t)
     X_test = X_t.reshape(X_t.shape[0], timesteps, n_features)
     
-    X_v, y_v = temporalize(X=X_val, y=np.zeros(len(X_val)), lookback=timesteps)
+    X_v, y_v = temporalize(X = X_val, y = np.zeros(len(X_val)), lookback = timesteps)
 
     X_v = np.array(X_v)
     X_val = X_v.reshape(X_v.shape[0], timesteps, n_features)
@@ -398,7 +394,7 @@ print('y_test Shape: ', np.shape(y_test))
 # In[21]:
 
 
-fullname = model_folder + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
+fullname = model_folder + '/' + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
 print("Model file path:", fullname)
 
 
@@ -453,31 +449,24 @@ recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
 
 # In[36]:
 
-start = time.time()
 
-print('Starting Loop')
-while True:
-    X_recon = []
-    for test_example in X_test:
-        # Ensure the data is in the correct dtype expected by the model
-        test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-        
-        # Set the model input tensor to the preprocessed test_example
-        interpreter.set_tensor(input_details[0]['index'], test_example)
-        
-        # Run inference
-        interpreter.invoke()
-        
-        # Extract the output tensor and remove the unnecessary dimension
-        output_data = interpreter.get_tensor(output_details[0]['index'])
-        output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
-        
-        # Append the result to the predictions list
-        X_recon.append(output_data_squeezed)
-
-end = time.time()
-total = end - start
-ips = len(X_test)/total
+X_recon = []
+for test_example in X_test:
+    # Ensure the data is in the correct dtype expected by the model
+    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    
+    # Set the model input tensor to the preprocessed test_example
+    interpreter.set_tensor(input_details[0]['index'], test_example)
+    
+    # Run inference
+    interpreter.invoke()
+    
+    # Extract the output tensor and remove the unnecessary dimension
+    output_data = interpreter.get_tensor(output_details[0]['index'])
+    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+    
+    # Append the result to the predictions list
+    X_recon.append(output_data_squeezed)
 
 # Convert predictions list to a numpy array
 X_recon = np.array(X_recon)
@@ -528,7 +517,7 @@ if model_name == 'HybridAE' or model_name == 'LSTMAE':
 
 
 # ### Reconstruction Error Threshold
-# Calculates the reconstruction error threshold to apply to test set predictions. If the value of the reconstruction error exceeds the threshold, it is considered anomalous.
+# Calculates the reconstruction error threshold to apply to test set predictions. If the value of the reconstruction error exceed the threshold, it is considered anomalous.
 
 # In[39]:
 
@@ -596,7 +585,7 @@ fig, ax = plt.subplots(figsize=(8, 8))
 ax.matshow(conf_matrix, cmap=plt.cm.Oranges, alpha=0.3)
 for i in range(conf_matrix.shape[0]):
     for j in range(conf_matrix.shape[1]):
-        ax.text(x=j, y=i, s=conf_matrix[i, j], va='center', ha='center', size='xx-large')
+        ax.text(x=j, y=i,s=conf_matrix[i, j], va='center', ha='center', size='xx-large')
 
 plt.xlabel('Predictions', fontsize=18)
 plt.ylabel('Actuals', fontsize=18)
@@ -608,4 +597,6 @@ print('F1 Score: %.3f' % f1_score(y_test, y_pred))
 print('Accuracy: %.3f' % accuracy_score(y_test, y_pred))
 print('Precision: %.3f' % precision_score(y_test, y_pred))
 print('Recall: %.3f' % recall_score(y_test, y_pred))
-print('Inference Per Second: ', ips)
+
+
+# In[ ]:
