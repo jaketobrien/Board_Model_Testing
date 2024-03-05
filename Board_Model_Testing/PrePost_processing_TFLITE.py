@@ -23,8 +23,8 @@ import keras
 # In[2]:
 
 
-import tkinter as tk
-from tkinter import filedialog
+#import tkinter as tk
+#from tkinter import filedialog
 
 
 # ### Saved Model Definition
@@ -57,8 +57,8 @@ from tkinter import filedialog
 
 
 def select_file():
-    root = tk.Tk()
-    root.withdraw()  # Hide the small tkinter window
+    #root = tk.Tk()
+    #root.withdraw()  # Hide the small tkinter window
 
     current_working_directory = os.getcwd()
     folder = current_working_directory + '/Saved_models'
@@ -400,10 +400,10 @@ fullname
 
 
 import numpy as np
-import tensorflow as tf
+#import tensorflow as tf
 
 # Load the TFLite model and allocate tensors
-interpreter = tf.lite.Interpreter(model_path=fullname)
+interpreter = tflite.Interpreter(model_path=fullname)
 interpreter.allocate_tensors()
 
 # Get input and output tensor information
