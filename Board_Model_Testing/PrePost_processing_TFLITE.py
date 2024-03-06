@@ -428,8 +428,11 @@ output_details = interpreter.get_output_details()
 X_recon_train = []
 for test_example in X_train:
     # Ensure the data is in the correct dtype expected by the model
-    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    test_example = test_example.astype(np.float32)
+    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+
+    # Reshape the input data to match the expected shape (assuming 1 feature per time step)
+    test_example = np.expand_dims(test_example, axis=-1)  # Add a new axis for features
+    test_example = np.transpose(test_example, (0, 2, 1))  # Transpose to match (batch_size, time_steps, features)
 	
     # Set the model input tensor to the preprocessed test_example
     interpreter.set_tensor(input_details[0]['index'], test_example)
@@ -458,8 +461,12 @@ recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
 X_recon = []
 for test_example in X_test:
     # Ensure the data is in the correct dtype expected by the model
-    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    test_example = test_example.astype(np.float32)
+    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    #test_example = test_example.astype(np.float32)
+
+    # Reshape the input data to match the expected shape (assuming 1 feature per time step)
+    test_example = np.expand_dims(test_example, axis=-1)  # Add a new axis for features
+    test_example = np.transpose(test_example, (0, 2, 1))  # Transpose to match (batch_size, time_steps, features)
       
     # Set the model input tensor to the preprocessed test_example
     interpreter.set_tensor(input_details[0]['index'], test_example)
@@ -509,13 +516,17 @@ start = time.time()
 
 X_recon_val = []
 for test_example in X_val:
-	#test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-	test_example = test_example.astype(np.float32)
+	test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+	#test_example = test_example.astype(np.float32)
+	# Reshape the input data to match the expected shape (assuming 1 feature per time step)
+        test_example = np.expand_dims(test_example, axis=-1)  # Add a new axis for features
+        test_example = np.transpose(test_example, (0, 2, 1))  # Transpose to match (batch_size, time_steps, features)
+    
 	interpreter.set_tensor(input_details[0]['index'], test_example)
 	interpreter.invoke()
 	output_data = interpreter.get_tensor(output_details[0]['index'])
 	#output_data_squeezed = np.squeeze(output_data, axis=0)
-	X_recon_val.append(output_data_squeezed)
+	#X_recon_val.append(output_data_squeezed)
 	X_recon_val.append(output_data)
 
 end = time.time()
