@@ -397,7 +397,8 @@ print('y_test Shape: ', np.shape(y_test))
 # In[21]:
 
 
-fullname = model_folder + '/' + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
+#fullname = model_folder + '/' + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
+fullname = model_folder + '/' + model_name + '_' + filename + "_" + str(window_size) + '.tflite'
 print("Model file path:", fullname)
 
 
