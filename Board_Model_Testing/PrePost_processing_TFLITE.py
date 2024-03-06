@@ -428,26 +428,22 @@ output_details = interpreter.get_output_details()
 X_recon_train = []
 for test_example in X_train:
     # Ensure the data is in the correct dtype expected by the model
-    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    
+    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    test_example = test_example.astype(np.float32)
+	
     # Set the model input tensor to the preprocessed test_example
     interpreter.set_tensor(input_details[0]['index'], test_example)
-    
-    #input_shape = input_details[0]['shape']
-    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    #test_example = np.expand_dims(test_example, axis=-1)  # Assuming your input tensor expects a 3D shape
-    #test_example = np.resize(test_example, input_shape)
-    #interpreter.set_tensor(input_details[0]['index'], test_example)
 
     # Run inference
     interpreter.invoke()
     
     # Extract the output tensor and remove the unnecessary dimension
     output_data = interpreter.get_tensor(output_details[0]['index'])
-    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+    #output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
     
     # Append the result to the predictions list
-    X_recon_train.append(output_data_squeezed)
+    #X_recon_train.append(output_data_squeezed)
+    X_recon_train.append(output_data)
 
 # Convert predictions list to a numpy array
 X_recon_train = np.array(X_recon_train)
@@ -462,31 +458,22 @@ recon_err_train = np.mean(np.power(X_train - X_recon_train, 2), axis=1)
 X_recon = []
 for test_example in X_test:
     # Ensure the data is in the correct dtype expected by the model
-    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-
-    # Assuming your model expects a shape like (batch_size, time_steps, features)
-    # Reshape X_test to match the expected input shape
-    batch_size = test_example.shape[0]  # Number of samples in your test data (should be 1 for each iteration)
-    time_steps = test_example.shape[1]  # Number of time steps (sequence length)
-    features = 1  # Number of features per time step
-    test_example_reshaped = test_example.reshape(batch_size, time_steps, features)
-    
+    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    test_example = test_example.astype(np.float32)
+      
     # Set the model input tensor to the preprocessed test_example
-    interpreter.set_tensor(input_details[0]['index'], test_example_reshaped)
-    
-    
-    # Set the model input tensor to the preprocessed test_example
-    #interpreter.set_tensor(input_details[0]['index'], test_example)
+    interpreter.set_tensor(input_details[0]['index'], test_example)
     
     # Run inference
     interpreter.invoke()
     
     # Extract the output tensor and remove the unnecessary dimension
     output_data = interpreter.get_tensor(output_details[0]['index'])
-    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+    #output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
     
     # Append the result to the predictions list
-    X_recon.append(output_data_squeezed)
+    #X_recon.append(output_data_squeezed)
+    X_recon.append(output_data)
 
 # Convert predictions list to a numpy array
 X_recon = np.array(X_recon)
@@ -522,12 +509,14 @@ start = time.time()
 
 X_recon_val = []
 for test_example in X_val:
-	test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+	#test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+	test_example = test_example.astype(np.float32)
 	interpreter.set_tensor(input_details[0]['index'], test_example)
 	interpreter.invoke()
 	output_data = interpreter.get_tensor(output_details[0]['index'])
-	output_data_squeezed = np.squeeze(output_data, axis=0)
+	#output_data_squeezed = np.squeeze(output_data, axis=0)
 	X_recon_val.append(output_data_squeezed)
+	X_recon_val.append(output_data)
 
 end = time.time()
 total = end - start
