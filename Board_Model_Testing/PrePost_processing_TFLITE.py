@@ -376,7 +376,9 @@ if model_name == 'HybridAE' or model_name == 'LSTMAE':
     X_v = np.array(X_v)
     X_val = X_v.reshape(X_v.shape[0], timesteps, n_features)
 
-
+if model_name == 'Transformer':
+	X_train = np.expand_dims(X_train, axis=1)
+	
 # In[20]:
 
 
