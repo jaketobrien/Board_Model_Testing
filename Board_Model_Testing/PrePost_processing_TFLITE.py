@@ -397,8 +397,7 @@ print('y_test Shape: ', np.shape(y_test))
 # In[21]:
 
 
-#fullname = model_folder + '/' + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
-fullname = model_folder + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
+fullname = model_folder + '/' + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
 print("Model file path:", fullname)
 
 
@@ -429,24 +428,19 @@ X_recon_train = []
 for test_example in X_train:
     # Ensure the data is in the correct dtype expected by the model
     test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-
-    # Reshape the input data to match the expected shape (assuming 1 feature per time step)
-    test_example = np.expand_dims(test_example, axis=-1)  # Add a new axis for features
-    test_example = np.transpose(test_example, (0, 2, 1))  # Transpose to match (batch_size, time_steps, features)
-	
+    
     # Set the model input tensor to the preprocessed test_example
     interpreter.set_tensor(input_details[0]['index'], test_example)
-
+    
     # Run inference
     interpreter.invoke()
     
     # Extract the output tensor and remove the unnecessary dimension
     output_data = interpreter.get_tensor(output_details[0]['index'])
-    #output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
     
     # Append the result to the predictions list
-    #X_recon_train.append(output_data_squeezed)
-    X_recon_train.append(output_data)
+    X_recon_train.append(output_data_squeezed)
 
 # Convert predictions list to a numpy array
 X_recon_train = np.array(X_recon_train)
@@ -462,12 +456,7 @@ X_recon = []
 for test_example in X_test:
     # Ensure the data is in the correct dtype expected by the model
     test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    #test_example = test_example.astype(np.float32)
-
-    # Reshape the input data to match the expected shape (assuming 1 feature per time step)
-    test_example = np.expand_dims(test_example, axis=-1)  # Add a new axis for features
-    test_example = np.transpose(test_example, (0, 2, 1))  # Transpose to match (batch_size, time_steps, features)
-      
+    
     # Set the model input tensor to the preprocessed test_example
     interpreter.set_tensor(input_details[0]['index'], test_example)
     
@@ -476,11 +465,10 @@ for test_example in X_test:
     
     # Extract the output tensor and remove the unnecessary dimension
     output_data = interpreter.get_tensor(output_details[0]['index'])
-    #output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
     
     # Append the result to the predictions list
-    #X_recon.append(output_data_squeezed)
-    X_recon.append(output_data)
+    X_recon.append(output_data_squeezed)
 
 # Convert predictions list to a numpy array
 X_recon = np.array(X_recon)
@@ -514,33 +502,14 @@ start = time.time()
 	    # Append the result to the predictions list
 	    #X_recon_val.append(output_data_squeezed)
 
-#X_recon_val = []
-#for test_example in X_val:
-	#test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-	#test_example = test_example.astype(np.float32)
-	# Reshape the input data to match the expected shape (assuming 1 feature per time step)
-        #test_example = np.expand_dims(test_example, axis=-1)  # Add a new axis for features
-        #test_example = np.transpose(test_example, (0, 2, 1))  # Transpose to match (batch_size, time_steps, features)
-    
-	#interpreter.set_tensor(input_details[0]['index'], test_example)
-	#interpreter.invoke()
-	#output_data = interpreter.get_tensor(output_details[0]['index'])
-	#output_data_squeezed = np.squeeze(output_data, axis=0)
-	#X_recon_val.append(output_data_squeezed)
-	#X_recon_val.append(output_data)
-
 X_recon_val = []
 for test_example in X_val:
-    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    # Reshape the input data to match the expected shape (assuming 1 feature per time step)
-    test_example = np.expand_dims(test_example, axis=-1)  # Add a new axis for features
-    test_example = np.transpose(test_example, (0, 2, 1))  # Transpose to match (batch_size, time_steps, features)
-    
-    interpreter.set_tensor(input_details[0]['index'], test_example)
-    interpreter.invoke()
-    output_data = interpreter.get_tensor(output_details[0]['index'])
-    X_recon_val.append(output_data)
-
+	test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+	interpreter.set_tensor(input_details[0]['index'], test_example)
+	interpreter.invoke()
+	output_data = interpreter.get_tensor(output_details[0]['index'])
+	output_data_squeezed = np.squeeze(output_data, axis=0)
+	X_recon_val.append(output_data_squeezed)
 
 end = time.time()
 total = end - start
