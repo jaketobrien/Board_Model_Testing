@@ -77,7 +77,7 @@ import matplotlib.pyplot as plt
 #ModelName = 'BasicAE_P-3_150'
 #ModelName = 'CNNAE_P-3_30'
 ModelName = 'Transformer_P-3_100'
-filename = ModelName + '.tflite'
+filename = ModelName + '_edgetpu.tflite'
 filename, extension = os.path.splitext(filename)
 if filename:
     print("Selected file:", filename)
@@ -398,7 +398,7 @@ print('y_test Shape: ', np.shape(y_test))
 
 
 #fullname = model_folder + '/' + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
-fullname = model_folder + model_name + '_' + filename + "_" + str(window_size) + '.tflite'
+fullname = model_folder + model_name + '_' + filename + "_" + str(window_size) + "_edgetpu" + '.tflite'
 print("Model file path:", fullname)
 
 
@@ -428,11 +428,17 @@ output_details = interpreter.get_output_details()
 X_recon_train = []
 for test_example in X_train:
     # Ensure the data is in the correct dtype expected by the model
-    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
     
     # Set the model input tensor to the preprocessed test_example
-    interpreter.set_tensor(input_details[0]['index'], test_example)
+    #interpreter.set_tensor(input_details[0]['index'], test_example)
     
+    input_shape = input_details[0]['shape']
+    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    test_example = np.expand_dims(test_example, axis=-1)  # Assuming your input tensor expects a 3D shape
+    test_example = np.resize(test_example, input_shape)
+    interpreter.set_tensor(input_details[0]['index'], test_example)
+
     # Run inference
     interpreter.invoke()
     
