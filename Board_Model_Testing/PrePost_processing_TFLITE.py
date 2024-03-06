@@ -428,16 +428,16 @@ output_details = interpreter.get_output_details()
 X_recon_train = []
 for test_example in X_train:
     # Ensure the data is in the correct dtype expected by the model
-    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
     
     # Set the model input tensor to the preprocessed test_example
-    #interpreter.set_tensor(input_details[0]['index'], test_example)
-    
-    input_shape = input_details[0]['shape']
-    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
-    test_example = np.expand_dims(test_example, axis=-1)  # Assuming your input tensor expects a 3D shape
-    test_example = np.resize(test_example, input_shape)
     interpreter.set_tensor(input_details[0]['index'], test_example)
+    
+    #input_shape = input_details[0]['shape']
+    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+    #test_example = np.expand_dims(test_example, axis=-1)  # Assuming your input tensor expects a 3D shape
+    #test_example = np.resize(test_example, input_shape)
+    #interpreter.set_tensor(input_details[0]['index'], test_example)
 
     # Run inference
     interpreter.invoke()
@@ -463,9 +463,20 @@ X_recon = []
 for test_example in X_test:
     # Ensure the data is in the correct dtype expected by the model
     test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+
+    # Assuming your model expects a shape like (batch_size, time_steps, features)
+    # Reshape X_test to match the expected input shape
+    batch_size = test_example.shape[0]  # Number of samples in your test data (should be 1 for each iteration)
+    time_steps = test_example.shape[1]  # Number of time steps (sequence length)
+    features = 1  # Number of features per time step
+    test_example_reshaped = test_example.reshape(batch_size, time_steps, features)
     
     # Set the model input tensor to the preprocessed test_example
-    interpreter.set_tensor(input_details[0]['index'], test_example)
+    interpreter.set_tensor(input_details[0]['index'], test_example_reshaped)
+    
+    
+    # Set the model input tensor to the preprocessed test_example
+    #interpreter.set_tensor(input_details[0]['index'], test_example)
     
     # Run inference
     interpreter.invoke()
