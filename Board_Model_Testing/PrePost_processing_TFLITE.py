@@ -96,7 +96,7 @@ print(parts)
 
 
 # Folder
-model_folder = 'Saved_models_multi/'
+model_folder = 'Saved_models_full/'
 # Model
 model_name = parts[0]
 # Selected Channel
