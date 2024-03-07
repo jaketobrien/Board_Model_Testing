@@ -62,7 +62,7 @@ import matplotlib.pyplot as plt
     #root.withdraw()  # Hide the small tkinter window
 
     #current_working_directory = os.getcwd()
-    #folder = current_working_directory + '/Saved_models'
+    #folder = current_working_directory + '/Saved_models_multi'
     #file_path = filedialog.askopenfilename(initialdir=folder)
 
     #if file_path:  # Check if a file was selected
@@ -74,9 +74,9 @@ import matplotlib.pyplot as plt
 
 # Call the function and get the filename
 #filename = select_file()
-#ModelName = 'BasicAE_P-3_150'
+ModelName = 'BasicAE_P-3_150'
 #ModelName = 'CNNAE_P-3_30'
-ModelName = 'Transformer_P-3_100'
+#ModelName = 'Transformer_P-3_100'
 filename = ModelName + '_edgetpu.tflite'
 filename, extension = os.path.splitext(filename)
 if filename:
@@ -96,7 +96,7 @@ print(parts)
 
 
 # Folder
-model_folder = 'Saved_models/'
+model_folder = 'Saved_models_multi/'
 # Model
 model_name = parts[0]
 # Selected Channel
