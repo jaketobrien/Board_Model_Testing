@@ -74,8 +74,8 @@ import matplotlib.pyplot as plt
 
 # Call the function and get the filename
 #filename = select_file()
-ModelName = 'BasicAE_F-5_30'
-#ModelName = 'CNNAE_F-5_30'
+#ModelName = 'BasicAE_F-5_30'
+ModelName = 'CNNAE_F-5_30'
 #ModelName = 'Transformer_P-3_100'
 filename = ModelName + '_edgetpu.tflite'
 filename, extension = os.path.splitext(filename)
