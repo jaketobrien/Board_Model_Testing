@@ -484,25 +484,25 @@ recon_err_test = np.mean(np.power(X_test - X_recon, 2), axis=1)
 
 start = time.time()
 
-print('Starting Loop')
-while True:
-	X_recon_val = []
-	for test_example in X_val:
+#print('Starting Loop')
+#while True:
+	#X_recon_val = []
+	#for test_example in X_val:
 	    # Ensure the data is in the correct dtype expected by the model
-	    test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
+	    #test_example = np.expand_dims(test_example, axis=0).astype(np.float32)
 	    
 	    # Set the model input tensor to the preprocessed test_example
-	    interpreter.set_tensor(input_details[0]['index'], test_example)
+	    #interpreter.set_tensor(input_details[0]['index'], test_example)
 	    
 	    # Run inference
-	    interpreter.invoke()
+	    #interpreter.invoke()
 	    
 	    # Extract the output tensor and remove the unnecessary dimension
-	    output_data = interpreter.get_tensor(output_details[0]['index'])
-	    output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
+	    #output_data = interpreter.get_tensor(output_details[0]['index'])
+	    #output_data_squeezed = np.squeeze(output_data, axis=0)  # Removes the extra dimension
 	    
 	    # Append the result to the predictions list
-	    X_recon_val.append(output_data_squeezed)
+	    #X_recon_val.append(output_data_squeezed)
 
 X_recon_val = []
 for test_example in X_val:
